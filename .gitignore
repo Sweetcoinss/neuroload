@@ -1,0 +1,9 @@
+# build artifacts
+build/
+__pycache__/
+*.pyc
+preview.png
+
+# keep only the standalone exe in dist/
+dist/*
+!dist/NeuroLoad.exe
