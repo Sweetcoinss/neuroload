@@ -9,13 +9,15 @@ python neuroload_win.py
 ```
 
 ## EXE جاهز (واحد الملف)
+`dist/NeuroLoad.exe` — موجود فالريبو، يمشي دايركت بلا Python.
+
+إذا بغيتي تبنيو بيدك:
 ```powershell
 pip install pyinstaller
 pyinstaller --noconfirm --clean --onefile --windowed --name NeuroLoad --icon neuroload.ico `
   --collect-all customtkinter --collect-all yt_dlp --collect-all imageio_ffmpeg --collect-all PIL `
   neuroload_win.py
 ```
-النتيجة: `dist\NeuroLoad.exe` — يخدم دايركت بلا ما تثبت شي حاجة.
 
 ## المميزات
 - لصق الرابط + Analyze: يجيب العنوان، القناة، المدة، الثامبنايل، والرخصة.
