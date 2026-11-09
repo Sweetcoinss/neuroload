@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NeuroLoad — Fast, Clean Video Downloader for Windows & Android</title>
+<meta name="description" content="NeuroLoad: an elegant YouTube downloader for Windows and Android. Paste one link — pick a quality (1080p…MP3) — download at 16 connections with live progress. Personal & Creative Commons use only." />
+<meta property="og:title" content="NeuroLoad — Fast, Clean Video Downloader" />
+<meta property="og:description" content="One link. One click. Lightning-fast downloads on Windows and Android." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://sweetcoinss.github.io/neuroload/" />
+<meta property="og:image" content="https://sweetcoinss.github.io/neuroload/favicon.png" />
+<link rel="icon" type="image/png" href="favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070b18;
+  --bg2:#0b1020;
+  --panel:#151d38;
+  --panel2:#1f2947;
+  --panel3:#262f55;
+  --cyan:#22d3ee;
+  --violet:#8b5cf6;
+  --text:#e8ecfb;
+  --dim:#98a2c6;
+  --green:#34d399;
+  --amber:#fbbf24;
+  --radius:18px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+.mono{font-family:'JetBrains Mono',monospace}
+.display{font-family:'Space Grotesk',sans-serif}
+
+/* ambient background */
+.bg-fx{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.bg-fx::before{content:"";position:absolute;width:720px;height:720px;top:-260px;right:-220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(139,92,246,.32) 0%,transparent 68%)}
+.bg-fx::after{content:"";position:absolute;width:620px;height:620px;top:38%;left:-260px;border-radius:50%;
+  background:radial-gradient(circle,rgba(34,211,238,.22) 0%,transparent 68%)}
+.grid-lines{position:absolute;inset:0;opacity:.35;
+  background-image:linear-gradient(rgba(152,162,198,.055) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(152,162,198,.055) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse 90% 70% at 50% 0%,black 40%,transparent 100%);
+  -webkit-mask-image:radial-gradient(ellipse 90% 70% at 50% 0%,black 40%,transparent 100%)}
+
+/* nav */
+nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:rgba(7,11,24,.72);border-bottom:1px solid rgba(152,162,198,.10)}
+.nav-inner{max-width:1180px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:28px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.logo-mark{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--cyan),var(--violet));box-shadow:0 6px 18px rgba(139,92,246,.35)}
+.logo-mark svg{width:20px;height:20px}
+.logo-name{font-family:'Space Grotesk';font-weight:700;font-size:20px;color:var(--text);letter-spacing:.3px}
+.logo-name span{background:linear-gradient(90deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.nav-links{display:flex;gap:26px;margin-left:auto;align-items:center}
+.nav-links a{color:var(--dim);text-decoration:none;font-size:13.5px;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.gh-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:10px;font-size:13px;font-weight:600;
+  color:#071018;background:linear-gradient(135deg,var(--cyan),var(--violet));text-decoration:none;transition:transform .2s, box-shadow .2s}
+.gh-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(34,211,238,.3)}
+@media(max-width:760px){.nav-links a:not(.gh-btn){display:none}}
+
+/* hero */
+.hero{max-width:1180px;margin:0 auto;padding:84px 24px 72px;text-align:center}
+.badge{display:inline-flex;align-items:center;gap:9px;padding:7px 18px;border-radius:50px;
+  border:1px solid rgba(34,211,238,.35);background:rgba(34,211,238,.07);
+  font-size:12px;font-weight:600;color:var(--cyan);letter-spacing:.4px;margin-bottom:30px}
+.badge .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+h1{font-family:'Space Grotesk';font-weight:700;font-size:clamp(42px,7vw,76px);line-height:1.02;letter-spacing:-.02em}
+h1 .grad{display:block;background:linear-gradient(92deg,#22d3ee 0%,#7dd3fc 30%,#8b5cf6 75%,#c084fc 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;padding:6px 0 10px}
+.sub{max-width:640px;margin:26px auto 0;color:var(--dim);font-size:17px;line-height:1.65}
+.sub b{color:var(--text);font-weight:600}
+.ctas{display:flex;gap:16px;justify-content:center;margin-top:40px;flex-wrap:wrap}
+.cta{display:inline-flex;align-items:center;gap:12px;padding:15px 26px;border-radius:14px;text-decoration:none;font-weight:700;font-size:15px;
+  transition:transform .2s, box-shadow .2s, border-color .2s}
+.cta small{display:block;font-weight:500;font-size:11px;opacity:.75}
+.cta-win{background:linear-gradient(135deg,var(--cyan),var(--violet));color:#071018;box-shadow:0 14px 44px rgba(139,92,246,.4)}
+.cta-win:hover{transform:translateY(-3px);box-shadow:0 20px 56px rgba(34,211,238,.4)}
+.cta-and{background:var(--panel2);color:var(--text);border:1px solid var(--panel3)}
+.cta-and:hover{transform:translateY(-3px);border-color:var(--cyan)}
+.hero-note{margin-top:18px;font-size:12px;color:var(--dim)}
+.hero-note b{color:var(--amber);font-weight:600}
+
+/* app mock */
+.mock-wrap{max-width:1080px;margin:64px auto 0;padding:0 24px}
+.mock{position:relative;border-radius:var(--radius);overflow:hidden;
+  border:1px solid rgba(152,162,198,.16);
+  background:linear-gradient(160deg,#151d38 0%,#0f1530 100%);
+  box-shadow:0 40px 120px rgba(0,0,0,.55), 0 0 0 1px rgba(34,211,238,.06) inset, 0 0 90px rgba(139,92,246,.14)}
+.titlebar{display:flex;align-items:center;gap:14px;padding:12px 18px;background:rgba(7,11,24,.55);border-bottom:1px solid rgba(152,162,198,.10)}
+.traffic{display:flex;gap:7px}
+.traffic i{width:11px;height:11px;border-radius:50%;background:var(--panel3)}
+.traffic i:nth-child(1){background:#f87171}.traffic i:nth-child(2){background:#fbbf24}.traffic i:nth-child(3){background:#34d399}
+.tb-title{color:var(--dim);font-size:12px;letter-spacing:.02em}
+.tb-title b{color:var(--cyan);font-weight:600}
+.mock-body{display:grid;grid-template-columns:220px 1fr;min-height:420px}
+@media(max-width:860px){.mock-body{grid-template-columns:1fr}.mock-side{display:none!important}}
+.mock-side{background:rgba(21,29,56,.6);border-right:1px solid rgba(152,162,198,.08);padding:22px 16px;display:flex;flex-direction:column;gap:14px}
+.side-logo{width:56px;height:56px;border-radius:14px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--cyan),var(--violet))}
+.side-logo svg{width:28px;height:28px}
+.side-name{font-family:'Space Grotesk';font-size:17px;font-weight:700}
+.side-tag{color:var(--dim);font-size:10px;letter-spacing:.05em}
+.side-pill{align-self:flex-start;font-size:10px;font-weight:700;color:var(--cyan);background:var(--panel2);padding:5px 12px;border-radius:50px}
+.side-lead{font-size:9px;color:var(--dim);letter-spacing:.12em;font-weight:700;margin-top:8px}
+.side-path{font-family:'JetBrains Mono';font-size:9.5px;color:var(--text);opacity:.85;background:var(--panel);padding:9px 11px;border-radius:8px;word-break:break-all}
+.side-foot{margin-top:auto;font-size:8.5px;color:var(--dim);line-height:1.7}
+.mock-main{padding:22px 26px;display:flex;flex-direction:column;gap:14px}
+.m-label{font-size:9px;color:var(--dim);font-weight:700;letter-spacing:.14em}
+.m-field{display:flex;justify-content:space-between;align-items:center;gap:10px;
+  background:#111830;border:1px solid var(--panel3);border-radius:12px;padding:13px 16px;font-family:'JetBrains Mono';font-size:12px;color:var(--dim)}
+.m-field b{color:var(--cyan)}
+.m-btn{height:48px;border-radius:11px;border:0;display:grid;place-items:center;font-family:'Inter';font-weight:800;font-size:14px;color:#071018;
+  background:linear-gradient(90deg,var(--cyan),var(--violet));cursor:pointer}
+.m-chips{display:flex;gap:8px}
+.chip{font-size:11px;font-weight:700;color:var(--dim);background:var(--panel2);border:1px solid var(--panel3);padding:8px 13px;border-radius:9px}
+.chip.on{color:var(--cyan);border-color:rgba(34,211,238,.5);background:rgba(34,211,238,.12)}
+.m-dl{background:var(--panel2);border:1px solid var(--panel3);border-radius:13px;height:54px;display:grid;place-items:center;font-weight:800;font-size:15px;color:rgba(7,16,24,.55);
+  background:linear-gradient(90deg,#23304f,#23304f)}
+.m-list{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--panel2);border-radius:13px;padding:10px 12px}
+.m-ic{width:40px;height:40px;border-radius:10px;background:var(--panel2);display:grid;place-items:center;font-size:19px}
+.m-meta{flex:1;min-width:0}
+.m-title{font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m-sub{font-size:9px;color:var(--dim);margin-top:3px}
+.pbar{height:5px;border-radius:3px;background:var(--panel3);overflow:hidden;margin-top:6px}
+.pbar i{display:block;height:100%;width:64%;background:linear-gradient(90deg,var(--cyan),var(--violet))}
+.m-pct{font-family:'JetBrains Mono';font-size:11px;color:var(--cyan);font-weight:600}
+
+/* sections */
+section{max-width:1180px;margin:0 auto;padding:96px 24px 0}
+.sec-head{text-align:center;margin-bottom:44px}
+.kicker{font-size:11px;font-weight:700;letter-spacing:.2em;color:var(--cyan);text-transform:uppercase}
+h2{font-family:'Space Grotesk';font-weight:700;font-size:clamp(28px,4vw,44px);letter-spacing:-.01em;margin-top:10px}
+.sec-sub{color:var(--dim);margin-top:10px;font-size:15px}
+
+/* features */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:900px){.feat-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.feat-grid{grid-template-columns:1fr}}
+.card{background:linear-gradient(165deg,var(--panel) 0%,#101630 100%);border:1px solid rgba(152,162,198,.12);
+  border-radius:var(--radius);padding:26px;transition:transform .25s, border-color .25s, box-shadow .25s}
+.card:hover{transform:translateY(-5px);border-color:rgba(34,211,238,.35);box-shadow:0 24px 60px rgba(0,0,0,.4)}
+.f-ic{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;margin-bottom:16px;
+  background:linear-gradient(135deg,rgba(34,211,238,.16),rgba(139,92,246,.16));border:1px solid rgba(34,211,238,.28)}
+.f-ic svg{width:24px;height:24px;stroke:var(--cyan)}
+.card h3{font-family:'Space Grotesk';font-size:17px;font-weight:600;margin-bottom:8px}
+.card p{color:var(--dim);font-size:13px;line-height:1.65}
+.card p em{color:var(--text);font-style:normal;font-weight:600}
+
+/* downloads */
+.dl-grid{display:grid;grid-template-columns:1fr 1.35fr;gap:18px;align-items:start}
+@media(max-width:900px){.dl-grid{grid-template-columns:1fr}}
+.dl-card{background:linear-gradient(165deg,var(--panel),#101630);border:1px solid rgba(152,162,198,.14);border-radius:var(--radius);padding:30px;position:relative;overflow:hidden}
+.dl-card::after{content:"";position:absolute;width:280px;height:280px;border-radius:50%;top:-120px;right:-120px;
+  background:radial-gradient(circle,rgba(34,211,238,.12),transparent 70%)}
+.dl-os{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.dl-os svg{width:38px;height:38px}
+.dl-os h3{font-family:'Space Grotesk';font-size:20px}
+.dl-card>p{color:var(--dim);font-size:13px;margin-bottom:20px}
+.plat-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--panel2);
+  border-radius:12px;text-decoration:none;transition:border-color .2s, background .2s;margin-bottom:10px;background:rgba(17,24,48,.35)}
+.plat-row:hover{border-color:var(--cyan);background:rgba(34,211,238,.06)}
+.plat-row .pi{width:34px;height:34px;flex:none;border-radius:9px;background:var(--panel2);display:grid;place-items:center;font-size:17px}
+.plat-row .pn{flex:1;min-width:0}
+.plat-row .pn b{display:block;color:var(--text);font-size:13px}
+.plat-row .pn small{color:var(--dim);font-size:11px}
+.plat-row .ps{font-family:'JetBrains Mono';font-size:12px;color:var(--cyan);white-space:nowrap}
+.dl-badge{position:absolute;top:18px;right:18px;font-size:10px;font-weight:700;color:var(--green);
+  background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.35);padding:4px 10px;border-radius:50px;letter-spacing:.06em}
+.rel-link{display:inline-flex;align-items:center;gap:8px;margin-top:6px;color:var(--cyan);text-decoration:none;font-size:13px;font-weight:600}
+
+/* legal */
+.legal{background:linear-gradient(165deg,rgba(251,191,36,.06),rgba(251,191,36,.02));
+  border:1px solid rgba(251,191,36,.25);border-radius:var(--radius);padding:24px 28px;
+  display:flex;gap:18px;align-items:flex-start}
+.legal-ic{flex:none;width:44px;height:44px;border-radius:11px;background:rgba(251,191,36,.14);display:grid;place-items:center}
+.legal h3{font-size:15px;color:var(--amber);margin-bottom:6px;font-family:'Space Grotesk'}
+.legal p{color:var(--dim);font-size:13px;line-height:1.65}
+.legal code{color:var(--text);background:rgba(0,0,0,.35);padding:1px 6px;border-radius:5px;font-size:12px}
+
+/* footer */
+footer{margin-top:96px;border-top:1px solid rgba(152,162,198,.1);padding:34px 24px;text-align:center;color:var(--dim);font-size:12.5px}
+footer a{color:var(--cyan);text-decoration:none}
+.foot-links{display:flex;gap:22px;justify-content:center;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="bg-fx"><div class="grid-lines"></div></div>
+
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="#">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#071018" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 20h16"/>
+        </svg>
+      </div>
+      <div class="logo-name">Neuro<span>Load</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#download">Download</a>
+      <a href="#legal">Legal</a>
+      <a class="gh-btn" href="https://github.com/Sweetcoinss/neuroload" target="_blank" rel="noopener">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.27-.01-1.17-.02-2.13-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.27-1.68-1.27-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.2-1.5 3.17-1.18 3.17-1.18.63 1.58.24 2.75.12 3.04.74.81 1.18 1.84 1.18 3.1 0 4.42-2.7 5.39-5.27 5.67.41.36.78 1.06.78 2.14 0 1.55-.02 2.79-.02 3.17 0 .31.21.68.8.56A10.52 10.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <div class="badge"><span class="dot"></span> v1.0.0 — Windows &amp; Android</div>
+  <h1 class="display">Save it.<span class="grad">Fast. Forever.</span></h1>
+  <p class="sub">NeuroLoad downloads <b>your own</b> and <b>Creative Commons</b> videos from a single link — <b>1080p…MP3</b>, one click, <b>16 connections</b>, live progress. No ads. No watermark. No nonsense.</p>
+  <div class="ctas">
+    <a class="cta cta-win" href="https://github.com/Sweetcoinss/neuroload/releases/download/v1.0.0/NeuroLoad.exe">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 5.5l8-1.3V11H4zM13 4l7-1v8h-7zM4 13h8v6.8l-8-1.3zM13 13h7v7.6l-7-1.2z" fill="currentColor" stroke="none"/></svg>
+      <span>Download for Windows<small>NeuroLoad.exe · 68 MB · no install</small></span>
+    </a>
+    <a class="cta cta-and" href="https://github.com/Sweetcoinss/neuroload/releases/download/v1.0.0/NeuroLoad-Android-arm64-v8a.apk">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2.5" width="8" height="19" rx="2"/><circle cx="12" cy="18.5" r=".4" fill="currentColor"/></svg>
+      <span>Download for Android<small>arm64-v8a APK · 76 MB · sideload</small></span>
+    </a>
+  </div>
+  <p class="hero-note">⚠ For <b>personal use</b> &amp; <b>Creative Commons</b> content only — respect YouTube's Terms of Service.</p>
+
+  <!-- ===== APP MOCK ===== -->
+  <div class="mock-wrap">
+    <div class="mock">
+      <div class="titlebar">
+        <div class="traffic"><i></i><i></i><i></i></div>
+        <div class="tb-title"><b>NeuroLoad</b> for Windows — preview</div>
+      </div>
+      <div class="mock-body">
+        <aside class="mock-side">
+          <div class="side-logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#071018" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 20h16"/></svg>
+          </div>
+          <div>
+            <div class="side-name">NeuroLoad</div>
+            <div class="side-tag">Fast · Clean · Personal</div>
+          </div>
+          <div class="side-pill">YouTube → PC</div>
+          <div class="side-lead">SAVE TO</div>
+          <div class="side-path">C:\Users\you\Downloads\NeuroLoad</div>
+          <div class="side-foot">For personal use &amp; Creative Commons only.<br/>Powered by yt-dlp + ffmpeg.</div>
+        </aside>
+        <div class="mock-main">
+          <div class="m-label">VIDEO LINK</div>
+          <div class="m-field"><span>https://www.youtube.com/watch?v=<b>…</b></span><span class="mono" style="color:var(--cyan)">Paste</span></div>
+          <div class="m-btn">⚡ &nbsp;Analyze link</div>
+          <div class="m-label">FORMAT &amp; QUALITY</div>
+          <div class="m-chips"><span class="chip">1080p</span><span class="chip on">720p</span><span class="chip">480p</span><span class="chip">360p</span><span class="chip">MP3</span></div>
+          <div class="m-dl">⬇ &nbsp;Download video · 720p</div>
+          <div class="m-label">DOWNLOADS</div>
+          <div class="m-list">
+            <div class="m-ic">🎬</div>
+            <div class="m-meta">
+              <div class="m-title">Big Buck Bunny 60fps — Official Blender Foundation Short Film</div>
+              <div class="m-sub">MP4 · 720p · Creative Commons</div>
+              <div class="pbar"><i></i></div>
+            </div>
+            <div class="m-pct">64.0%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== FEATURES ===== -->
+<section id="features">
+  <div class="sec-head">
+    <div class="kicker">Why NeuroLoad</div>
+    <h2 class="display">Everything you need,<br/>nothing you don't.</h2>
+    <p class="sec-sub">A clean desktop experience and a pocket Android app — same engine, same taste.</p>
+  </div>
+  <div class="feat-grid">
+    <div class="card">
+      <div class="f-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></div>
+      <h3>One link is all it takes</h3>
+      <p>Paste any video URL — NeuroLoad <em>analyzes it instantly</em>: title, channel, duration, thumbnail and license. Then pick a quality and go.</p>
+    </div>
+    <div class="card">
+      <div class="f-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></div>
+      <h3>Blazing fast by default</h3>
+      <p>Built on <em>yt-dlp + aria2c</em>: <em>16 parallel connections</em>, multi-fragment downloading and ffmpeg merging — faster than your browser.</p>
+    </div>
+    <div class="card">
+      <div class="f-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2"/><path d="M7 15h.01M7 12h.01"/></svg></div>
+      <h3>Every quality, even MP3</h3>
+      <p>1080p · 720p · 480p · 360p — or extract pure <em>MP3 audio</em> with highest bitrate. Perfect for CC music and lectures.</p>
+    </div>
+    <div class="card">
+      <div class="f-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.2"/><path d="M12 18h.01"/></svg></div>
+      <h3>Android in your pocket</h3>
+      <p>Native <em>Jetpack Compose + Material 3</em> app, same neon style. APKs per ABI — or the universal one for every device.</p>
+    </div>
+    <div class="card">
+      <div class="f-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <h3>Honest &amp; transparent</h3>
+      <p>No accounts, no tracking, no ads, no watermarks. Open source — audit the code, build it yourself, trust what runs.</p>
+    </div>
+    <div class="card">
+      <div class="f-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+      <h3>Live control</h3>
+      <p>Watch real progress, ETA and speed. <em>Cancel anytime</em>, open finished files, share them — straight from the app.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DOWNLOAD ===== -->
+<section id="download">
+  <div class="sec-head">
+    <div class="kicker">Download NeuroLoad</div>
+    <h2 class="display">Pick your platform.</h2>
+    <p class="sec-sub">Free, open source, no sign-up. Straight from the official GitHub Release.</p>
+  </div>
+  <div class="dl-grid">
+    <!-- Windows -->
+    <div class="dl-card">
+      <div class="dl-badge">STABLE</div>
+      <div class="dl-os">
+        <svg viewBox="0 0 24 24" fill="#22d3ee"><path d="M3 5.5l8.5-1.35v7.35H3zM13.5 4l7.5-1.1v9H13.5zM3 12.5h8.5v7.4L3 18.6zM13.5 12.5H21v8.6l-7.5-1z"/></svg>
+        <h3 class="display">Windows 10 / 11</h3>
+      </div>
+      <p>Single <b style="color:var(--text)">.exe</b>, zero dependencies. Double-click and you're downloading.</p>
+      <a class="plat-row" href="https://github.com/Sweetcoinss/neuroload/releases/download/v1.0.0/NeuroLoad.exe">
+        <span class="pi">⬇️</span>
+        <span class="pn"><b>NeuroLoad.exe</b><small>One-file build · SmartScreen may warn (unsigned → More info → Run anyway)</small></span>
+        <span class="ps">68 MB</span>
+      </a>
+      <a class="rel-link" href="https://github.com/Sweetcoinss/neuroload/releases/tag/v1.0.0" target="_blank" rel="noopener">View on GitHub Releases →</a>
+    </div>
+
+    <!-- Android -->
+    <div class="dl-card">
+      <div class="dl-badge">APK</div>
+      <div class="dl-os">
+        <svg viewBox="0 0 24 24" fill="#a78bfa"><path d="M6.2 8.4l1.3-2.3a.55.55 0 0 1 .95.45v.4a10.7 10.7 0 0 1 6.9 0v-.4a.55.55 0 0 1 .95-.45l1.3 2.3A11 11 0 0 1 22 15.4H2a11 11 0 0 1 4.2-7zM7.6 13.5a.9.9 0 1 0 0-.01M16.4 13.5a.9.9 0 1 0 0-.01" opacity=".92"/></svg>
+        <h3 class="display">Android 8.0+</h3>
+      </div>
+      <p>Pick the APK for your device — or the universal one if unsure. Sideload: open APK → allow unknown apps → Install.</p>
+      <a class="plat-row" href="https://github.com/Sweetcoinss/neuroload/releases/download/v1.0.0/NeuroLoad-Android-arm64-v8a.apk">
+        <span class="pi">⭐</span>
+        <span class="pn"><b>arm64-v8a — recommended</b><small>Modern phones &amp; most tablets</small></span>
+        <span class="ps">76 MB</span>
+      </a>
+      <a class="plat-row" href="https://github.com/Sweetcoinss/neuroload/releases/download/v1.0.0/NeuroLoad-Android-universal.apk">
+        <span class="pi">🌐</span>
+        <span class="pn"><b>Universal APK</b><small>Every device — biggest download</small></span>
+        <span class="ps">230 MB</span>
+      </a>
+      <a class="plat-row" href="https://github.com/Sweetcoinss/neuroload/releases/download/v1.0.0/NeuroLoad-Android-armeabi-v7a.apk">
+        <span class="pi">📱</span>
+        <span class="pn"><b>armeabi-v7a</b><small>Older 32-bit Android devices</small></span>
+        <span class="ps">69 MB</span>
+      </a>
+      <a class="plat-row" href="https://github.com/Sweetcoinss/neuroload/releases/download/v1.0.0/NeuroLoad-Android-x86_64.apk">
+        <span class="pi">🖥️</span>
+        <span class="pn"><b>x86_64</b><small>64-bit emulators / x86 devices</small></span>
+        <span class="ps">79 MB</span>
+      </a>
+      <a class="plat-row" href="https://github.com/Sweetcoinss/neuroload/releases/download/v1.0.0/NeuroLoad-Android-x86.apk">
+        <span class="pi">🖥️</span>
+        <span class="pn"><b>x86</b><small>32-bit emulators / x86 devices</small></span>
+        <span class="ps">75 MB</span>
+      </a>
+      <a class="rel-link" href="https://github.com/Sweetcoinss/neuroload/releases/tag/v1.0.0" target="_blank" rel="noopener">View on GitHub Releases →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LEGAL ===== -->
+<section id="legal" style="padding-bottom:0">
+  <div class="legal">
+    <div class="legal-ic">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2L12 3z"/><path d="M12 10v4M12 17.5h.01"/></svg>
+    </div>
+    <div>
+      <h3>Read this before you download a single file</h3>
+      <p>NeuroLoad is a tool for downloading content you <code>own</code> or content licensed as <code>Creative Commons</code> — or with explicit permission from the author. Downloading arbitrary copyrighted videos violates <code>YouTube's Terms of Service</code> and, in most countries, copyright law. The apps are intentionally <b style="color:var(--text)">not on Google Play / the Microsoft Store</b>, and that's deliberate. Use common sense: <b style="color:var(--text)">personal use, CC content, your own uploads — that's the deal.</b></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>NeuroLoad v1.0.0 — free &amp; open source · built with yt-dlp, ffmpeg &amp; aria2c</div>
+  <div class="foot-links">
+    <a href="https://github.com/Sweetcoinss/neuroload" target="_blank" rel="noopener">Source code</a>
+    <a href="https://github.com/Sweetcoinss/neuroload/releases/tag/v1.0.0" target="_blank" rel="noopener">Releases</a>
+    <a href="https://github.com/Sweetcoinss/neuroload/releases/download/v1.0.0/SHA256SUMS.txt" target="_blank" rel="noopener">Checksums (SHA-256)</a>
+  </div>
+</footer>
+</body>
+</html>
