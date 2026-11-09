@@ -10,6 +10,7 @@ python neuroload_win.py
 
 ## EXE جاهز (واحد الملف)
 `dist/NeuroLoad.exe` — موجود فالريبو، يمشي دايركت بلا Python.
+هناك أيضاً `neuroload_web.py` → يُبنى بـ `pyinstaller --onefile --name NeuroLoad-Web --collect-all yt_dlp --collect-all imageio_ffmpeg neuroload_web.py` — يطلق سيرفر محلي `127.0.0.1:8752` بواجهة ويب (مذكور فالـ README ديال الريبو).
 
 إذا بغيتي تبنيو بيدك:
 ```powershell
